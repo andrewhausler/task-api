@@ -1,7 +1,19 @@
 import prisma from '../config/db.js';
 
-export async function findAll() {
-  return prisma.task.findMany();
+export async function findAll({ completed }) {
+  const conditions = {}
+
+  if (completed) {
+    conditions.AND = [
+      { completed: completed === 'true'}
+    ]
+  }
+
+  const tasks = prisma.task.findMany({
+    where: conditions
+  });
+
+  return tasks;
 }
 
 // Create a new task
